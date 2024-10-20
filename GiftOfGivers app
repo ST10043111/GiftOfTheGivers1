@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #5D6D7E;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section label {
+            display: block;
+            margin-top: 10px;
+        }
+        .output {
+            margin-top: 20px;
+            background-color: #F2F3F4;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to Helping Hands Management System</h1>
+
+    <div class="section">
+        <h2>Add Donor</h2>
+        <label for="donorName">Donor Name:</label>
+        <input type="text" id="donorName">
+        <label for="donationAmount">Donation Amount:</label>
+        <input type="number" id="donationAmount">
+        <button onclick="addDonor()">Add Donor</button>
+    </div>
+
+    <div class="section">
+        <h2>Add Volunteer</h2>
+        <label for="volunteerName">Volunteer Name:</label>
+        <input type="text" id="volunteerName">
+        <button onclick="addVolunteer()">Add Volunteer</button>
+    </div>
+
+    <div class="section">
+        <h2>Create Event</h2>
+        <label for="eventName">Event Name:</label>
+        <input type="text" id="eventName">
+        <label for="eventDate">Event Date:</label>
+        <input type="date" id="eventDate">
+        <button onclick="createEvent()">Create Event</button>
+    </div>
+
+    <div class="section">
+        <h2>View Information</h2>
+        <button onclick="showDonors()">Show Donors</button>
+        <button onclick="showVolunteers()">Show Volunteers</button>
+        <button onclick="showEvents()">Show Events</button>
+    </div>
+
+    <div id="output" class="output"></div>
+
+    <script>
+        const donors = [];
+        const volunteers = [];
+        const events = [];
+
+        function addDonor() {
+            const name = document.getElementById("donorName").value;
+            const amount = document.getElementById("donationAmount").value;
+            if (name && amount) {
+                donors.push({ name, amount });
+                alert("Donor added successfully.");
+            } else {
+                alert("Please enter valid donor details.");
+            }
+            clearInputs();
+        }
+
+        function addVolunteer() {
+            const name = document.getElementById("volunteerName").value;
+            if (name) {
+                volunteers.push({ name });
+                alert("Volunteer added successfully.");
+            } else {
+                alert("Please enter a valid volunteer name.");
+            }
+            clearInputs();
+        }
+
+        function createEvent() {
+            const name = document.getElementById("eventName").value;
+            const date = document.getElementById("eventDate").value;
+            if (name && date) {
+                events.push({ name, date });
+                alert("Event created successfully.");
+            } else {
+                alert("Please enter valid event details.");
+            }
+            clearInputs();
+        }
+
+        function showDonors() {
+            let output = "<h3>Donors</h3>";
+            if (donors.length === 0) {
+                output += "<p>No donors available.</p>";
+            } else {
+                donors.forEach(donor => {
+                    output += `<p>${donor.name} donated $${donor.amount}</p>`;
+                });
+            }
+            document.getElementById("output").innerHTML = output;
+        }
+
+        function showVolunteers() {
+            let output = "<h3>Volunteers</h3>";
+            if (volunteers.length === 0) {
+                output += "<p>No volunteers available.</p>";
+            } else {
+                volunteers.forEach(volunteer => {
+                    output += `<p>${volunteer.name}</p>`;
+                });
+            }
+            document.getElementById("output").innerHTML = output;
+        }
+
+        function showEvents() {
+            let output = "<h3>Events</h3>";
+            if (events.length === 0) {
+                output += "<p>No events available.</p>";
+            } else {
+                events.forEach(event => {
+                    output += `<p>${event.name} on ${new Date(event.date).toLocaleDateString()}</p>`;
+                });
+            }
+            document.getElementById("output").innerHTML = output;
+        }
+
+        function clearInputs() {
+            document.getElementById("donorName").value = '';
+            document.getElementById("donationAmount").value = '';
+            document.getElementById("volunteerName").value = '';
+            document.getElementById("eventName").value = '';
+            document.getElementById("eventDate").value = '';
+        }
+    </script>
+</body>
+</html>
