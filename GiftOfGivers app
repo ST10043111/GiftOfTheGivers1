@@ -1,152 +1,181 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NGO Management System</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+using System;
+using System.Collections.Generic;
+
+namespace NGOApplication
+{
+    public class Program
+    {
+        static void Main(string[] args)
+        {
+            NGO ngo = new NGO("Helping Hands");
+            ngo.Run();
         }
-        h1 {
-            color: #5D6D7E;
+    }
+
+    public class NGO
+    {
+        private string Name { get; set; }
+        private List<Donor> Donors { get; set; }
+        private List<Volunteer> Volunteers { get; set; }
+        private List<Event> Events { get; set; }
+
+        public NGO(string name)
+        {
+            Name = name;
+            Donors = new List<Donor>();
+            Volunteers = new List<Volunteer>();
+            Events = new List<Event>();
         }
-        .section {
-            margin-bottom: 20px;
-        }
-        .section label {
-            display: block;
-            margin-top: 10px;
-        }
-        .output {
-            margin-top: 20px;
-            background-color: #F2F3F4;
-            padding: 10px;
-        }
-    </style>
-</head>
-<body>
 
-    <h1>Welcome to Helping Hands Management System</h1>
+        public void Run()
+        {
+            while (true)
+            {
+                Console.WriteLine($"Welcome to {Name} Management System");
+                Console.WriteLine("1. Add Donor");
+                Console.WriteLine("2. Add Volunteer");
+                Console.WriteLine("3. Create Event");
+                Console.WriteLine("4. Show Donors");
+                Console.WriteLine("5. Show Volunteers");
+                Console.WriteLine("6. Show Events");
+                Console.WriteLine("7. Exit");
+                Console.Write("Choose an option: ");
 
-    <div class="section">
-        <h2>Add Donor</h2>
-        <label for="donorName">Donor Name:</label>
-        <input type="text" id="donorName">
-        <label for="donationAmount">Donation Amount:</label>
-        <input type="number" id="donationAmount">
-        <button onclick="addDonor()">Add Donor</button>
-    </div>
-
-    <div class="section">
-        <h2>Add Volunteer</h2>
-        <label for="volunteerName">Volunteer Name:</label>
-        <input type="text" id="volunteerName">
-        <button onclick="addVolunteer()">Add Volunteer</button>
-    </div>
-
-    <div class="section">
-        <h2>Create Event</h2>
-        <label for="eventName">Event Name:</label>
-        <input type="text" id="eventName">
-        <label for="eventDate">Event Date:</label>
-        <input type="date" id="eventDate">
-        <button onclick="createEvent()">Create Event</button>
-    </div>
-
-    <div class="section">
-        <h2>View Information</h2>
-        <button onclick="showDonors()">Show Donors</button>
-        <button onclick="showVolunteers()">Show Volunteers</button>
-        <button onclick="showEvents()">Show Events</button>
-    </div>
-
-    <div id="output" class="output"></div>
-
-    <script>
-        const donors = [];
-        const volunteers = [];
-        const events = [];
-
-        function addDonor() {
-            const name = document.getElementById("donorName").value;
-            const amount = document.getElementById("donationAmount").value;
-            if (name && amount) {
-                donors.push({ name, amount });
-                alert("Donor added successfully.");
-            } else {
-                alert("Please enter valid donor details.");
+                string choice = Console.ReadLine();
+                switch (choice)
+                {
+                    case "1":
+                        AddDonor();
+                        break;
+                    case "2":
+                        AddVolunteer();
+                        break;
+                    case "3":
+                        CreateEvent();
+                        break;
+                    case "4":
+                        ShowDonors();
+                        break;
+                    case "5":
+                        ShowVolunteers();
+                        break;
+                    case "6":
+                        ShowEvents();
+                        break;
+                    case "7":
+                        Console.WriteLine("Exiting...");
+                        return;
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
             }
-            clearInputs();
         }
 
-        function addVolunteer() {
-            const name = document.getElementById("volunteerName").value;
-            if (name) {
-                volunteers.push({ name });
-                alert("Volunteer added successfully.");
-            } else {
-                alert("Please enter a valid volunteer name.");
+        private void AddDonor()
+        {
+            Console.Write("Enter donor name: ");
+            string name = Console.ReadLine();
+            Console.Write("Enter donation amount: ");
+            decimal amount = Convert.ToDecimal(Console.ReadLine());
+            Donors.Add(new Donor(name, amount));
+            Console.WriteLine("Donor added successfully.");
+        }
+
+        private void AddVolunteer()
+        {
+            Console.Write("Enter volunteer name: ");
+            string name = Console.ReadLine();
+            Volunteers.Add(new Volunteer(name));
+            Console.WriteLine("Volunteer added successfully.");
+        }
+
+        private void CreateEvent()
+        {
+            Console.Write("Enter event name: ");
+            string name = Console.ReadLine();
+            Console.Write("Enter event date (MM/DD/YYYY): ");
+            DateTime date = DateTime.Parse(Console.ReadLine());
+            Events.Add(new Event(name, date));
+            Console.WriteLine("Event created successfully.");
+        }
+
+        private void ShowDonors()
+        {
+            Console.WriteLine("Donors:");
+            foreach (var donor in Donors)
+            {
+                Console.WriteLine(donor);
             }
-            clearInputs();
         }
 
-        function createEvent() {
-            const name = document.getElementById("eventName").value;
-            const date = document.getElementById("eventDate").value;
-            if (name && date) {
-                events.push({ name, date });
-                alert("Event created successfully.");
-            } else {
-                alert("Please enter valid event details.");
+        private void ShowVolunteers()
+        {
+            Console.WriteLine("Volunteers:");
+            foreach (var volunteer in Volunteers)
+            {
+                Console.WriteLine(volunteer);
             }
-            clearInputs();
         }
 
-        function showDonors() {
-            let output = "<h3>Donors</h3>";
-            if (donors.length === 0) {
-                output += "<p>No donors available.</p>";
-            } else {
-                donors.forEach(donor => {
-                    output += `<p>${donor.name} donated $${donor.amount}</p>`;
-                });
+        private void ShowEvents()
+        {
+            Console.WriteLine("Events:");
+            foreach (var ev in Events)
+            {
+                Console.WriteLine(ev);
             }
-            document.getElementById("output").innerHTML = output;
+        }
+    }
+
+    public class Donor
+    {
+        public string Name { get; set; }
+        public decimal DonationAmount { get; set; }
+
+        public Donor(string name, decimal donationAmount)
+        {
+            Name = name;
+            DonationAmount = donationAmount;
         }
 
-        function showVolunteers() {
-            let output = "<h3>Volunteers</h3>";
-            if (volunteers.length === 0) {
-                output += "<p>No volunteers available.</p>";
-            } else {
-                volunteers.forEach(volunteer => {
-                    output += `<p>${volunteer.name}</p>`;
-                });
-            }
-            document.getElementById("output").innerHTML = output;
+        public override string ToString()
+        {
+            return $"{Name} donated ${DonationAmount}";
+        }
+    }
+
+    public class Volunteer
+    {
+        public string Name { get; set; }
+
+        public Volunteer(string name)
+        {
+            Name = name;
         }
 
-        function showEvents() {
-            let output = "<h3>Events</h3>";
-            if (events.length === 0) {
-                output += "<p>No events available.</p>";
-            } else {
-                events.forEach(event => {
-                    output += `<p>${event.name} on ${new Date(event.date).toLocaleDateString()}</p>`;
-                });
-            }
-            document.getElementById("output").innerHTML = output;
+        public override string ToString()
+        {
+            return $"{Name}";
+        }
+    }
+
+    public class Event
+    {
+        public string Name { get; set; }
+        public DateTime Date { get; set; }
+
+        public Event(string name, DateTime date)
+        {
+            Name = name;
+            Date = date;
         }
 
-        function clearInputs() {
-            document.getElementById("donorName").value = '';
-            document.getElementById("donationAmount").value = '';
-            document.getElementById("volunteerName").value = '';
-            document.getElementById("eventName").value = '';
-            document.getElementById("eventDate").value = '';
+        public override string ToString()
+        {
+            return $"{Name} on {Date.ToShortDateString()}";
         }
-    </script>
-</body>
-</html>
+    }
+}
+
+
