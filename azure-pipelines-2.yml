@@ -12,12 +12,17 @@ pool:
  
 
 steps:
+
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
-
+  
+- task: Docker@2
+  inputs:
+    command: 'start'
+  
 - task: Docker@2
   inputs:
     command: 'buildAndPush'
@@ -26,3 +31,5 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
+  
+  
